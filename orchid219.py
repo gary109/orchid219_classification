@@ -66,9 +66,26 @@ class Orchid219(datasets.GeneratorBasedBuilder):
     DEFAULT_CONFIG_NAME = "orchid219"
     BUILDER_CONFIGS = [
         datasets.BuilderConfig(name="orchid219", version=datasets.Version("1.0.0"), description="Orchid219 Image Classification"),
+        datasets.BuilderConfig(name="public-test", version=datasets.Version("1.0.0"), description="Orchid219 Image Classification"),
     ]
 
     def _info(self):
+        if self.config.name == 'public-test':
+            features = datasets.Features(
+                {
+                    "filename":datasets.Value("string"),
+                    "image": datasets.Image(),
+                }
+            )
+            return datasets.DatasetInfo(
+                description=_DESCRIPTION,
+                features=features,  
+                supervised_keys=None,
+                homepage=_HOMEPAGE,
+                license=_LICENSE,
+                citation=_CITATION,
+            )
+            
         features = datasets.Features(
             {
                 "filename":datasets.Value("string"),
@@ -94,6 +111,25 @@ class Orchid219(datasets.GeneratorBasedBuilder):
 
     def _split_generators(self, dl_manager):
         from os.path import exists
+        if self.config.name == 'public-test':
+            root_PublicTestDatasets = '/content/drive/MyDrive/datasets/Orchid219/Public_Test'
+            
+            df = pd.DataFrame()
+            df['file'] = [str(i) for i in list(Path(root_PublicTestDatasets).rglob("*.JPG"))]
+            print(df.shape)
+            df.to_csv(os.path.join(root_PublicTestDatasets, 'public-test.csv'), index=False)
+
+            return [
+                datasets.SplitGenerator(
+                    name=datasets.Split.TEST, 
+                    gen_kwargs={
+                        "archive_path": os.path.join(root_PublicTestDatasets, 'public-test.csv'),
+                        'split':'test'
+                        }
+                    ),
+            ]
+
+
         dl_path = os.path.join(os.getcwd(),'datasets',_DL_URL.format(name=self.config.name))
         if exists(dl_path):
             archive_path = dl_manager.download_and_extract(dl_path)
@@ -140,12 +176,20 @@ class Orchid219(datasets.GeneratorBasedBuilder):
             ]
     
     def _generate_examples(self, archive_path, split):
-        filepath = os.path.join(archive_path,self.config.name)
-        csvPath = os.path.join(filepath,split+'.csv')  
-        df = pd.read_csv(csvPath, encoding="utf8")
-        for uid,row in df.iterrows():
-            filename,category = row
-            image_file = os.path.join(filepath,filename)
-            yield uid, {"filename": image_file, "image":Image.open(image_file), "category": category}
+        if self.config.name == 'public-test':
+            print(archive_path)
+            df = pd.read_csv(archive_path, encoding="utf8")
+            for uid,row in df.iterrows():
+                filename = row
+                image_file = filename
+                yield uid, {"filename": image_file, "image":Image.open(image_file)}
+        else:
+            filepath = os.path.join(archive_path,self.config.name)
+            csvPath = os.path.join(filepath,split+'.csv')  
+            df = pd.read_csv(csvPath, encoding="utf8")
+            for uid,row in df.iterrows():
+                filename,category = row
+                image_file = os.path.join(filepath,filename)
+                yield uid, {"filename": image_file, "image":Image.open(image_file), "category": category}
                 
 
