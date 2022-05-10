@@ -115,7 +115,7 @@ class Orchid219(datasets.GeneratorBasedBuilder):
             root_PublicTestDatasets = '/content/drive/MyDrive/datasets/Orchid219/Public_Test'
             
             df = pd.DataFrame()
-            df['file'] = [str(i) for i in list(Path(root_PublicTestDatasets).rglob("*.JPG"))]
+            df['file'] = [str(i) for i in list(Path(root_PublicTestDatasets).rglob("*.jpg"))]
             print(df.shape)
             df.to_csv(os.path.join(root_PublicTestDatasets, 'public-test.csv'), index=False)
 
@@ -179,8 +179,8 @@ class Orchid219(datasets.GeneratorBasedBuilder):
         if self.config.name == 'public-test':
             print(archive_path)
             df = pd.read_csv(archive_path, encoding="utf8")
-            for uid,row in df.iterrows():
-                filename = row
+            for uid,row in df.iterrows():             
+                filename = row[0]
                 image_file = filename
                 yield uid, {"filename": image_file, "image":Image.open(image_file)}
         else:
