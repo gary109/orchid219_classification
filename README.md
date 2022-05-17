@@ -2,7 +2,7 @@
 [OK] pytorch-21.08-py3:latest
 [OK] pytorch-21.06-py3:latest
 
-[1] git clone https://gitlab.com/gary109/ai-light-dance_transformers.git
+[1] git clone https://gitlab.com/gary109/orchid219_classification.git
 
 - sudo apt-get update
 - sudo apt install git-lfs
