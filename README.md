@@ -97,6 +97,25 @@ OMP_NUM_THREADS=1 accelerate launch run_image_classification.py \
     --use_auth_token="True" \
     --seed 1337
     
-    
-    
---cache_dir="Orchid219"
+## [Fine-Tune] gary109/orchid219_ft_data2vec-vision-large
+OMP_NUM_THREADS=1 accelerate launch run_image_classification_data2vec.py \
+    --dataset_name "gary109/orchid219" \
+    --model_name_or_path "gary109/orchid219_data2vec-vision-large" \
+    --output_dir="orchid219_ft_data2vec-vision-large" \
+    --remove_unused_columns False \
+    --overwrite_output_dir \
+    --do_train --do_eval --push_to_hub \
+    --push_to_hub_model_id="orchid219_ft_data2vec-vision-large" \
+    --learning_rate 2e-5 \
+    --num_train_epochs 800 \
+    --per_device_train_batch_size 64 \
+    --per_device_eval_batch_size 64 \
+    --logging_strategy steps \
+    --logging_steps 10 \
+    --evaluation_strategy epoch \
+    --save_strategy epoch \
+    --load_best_model_at_end True \
+    --save_total_limit 3 \
+    --use_auth_token \
+    --use_auth_token="True" \
+    --seed 1337 
