@@ -50,7 +50,7 @@ OMP_NUM_THREADS=1 accelerate launch run_image_classification_ViT-MAE.py \
 
 ## [Pre-Train] gary109/orchid219_pretrain_data2vec-vision-large-mae
 ---
-! OMP_NUM_THREADS=1 accelerate launch run_mae.py \
+OMP_NUM_THREADS=1 accelerate launch run_mae.py \
     --dataset_name="gary109/orchid219" \
     --model_name_or_path="gary109/orchid219_data2vec-vision-large" \
     --output_dir="orchid219_pretrain_data2vec-vision-large-mae" \
@@ -65,8 +65,8 @@ OMP_NUM_THREADS=1 accelerate launch run_image_classification_ViT-MAE.py \
     --num_train_epochs 1000 \
     --save_steps="1000" \
     --warmup_ratio 0.05 \
-    --per_device_train_batch_size 48 \
-    --per_device_eval_batch_size 48 \
+    --per_device_train_batch_size 134 \
+    --per_device_eval_batch_size 134 \
     --logging_strategy steps \
     --logging_steps 10 \
     --evaluation_strategy epoch \
