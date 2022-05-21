@@ -219,6 +219,7 @@ OMP_NUM_THREADS=1 accelerate launch run_image_classification_data2vec.py \
     --seed 1337 
 
 ## [Fine-Tune] gary109/orchid219_ft_data2vec-vision-large-ft1k
+---
 OMP_NUM_THREADS=1 accelerate launch run_image_classification_data2vec.py \
     --dataset_name "gary109/orchid219" \
     --model_name_or_path "facebook/data2vec-vision-large-ft1k" \
@@ -239,3 +240,68 @@ OMP_NUM_THREADS=1 accelerate launch run_image_classification_data2vec.py \
     --save_total_limit 3 \
     --use_auth_token \
     --seed 1337 
+
+## [Fine-Tune] On 雙子星雲端 gary109/orchid219_ft_data2vec-vision-large-ft1k
+---
+OMP_NUM_THREADS=1 accelerate launch  run_image_classification_data2vec.py \
+    --dataset_name "gary109/orchid219" \
+    --model_name_or_path "facebook/data2vec-vision-large-ft1k" \
+    --output_dir="orchid219_ft_data2vec-vision-large-ft1k" \
+    --remove_unused_columns False \
+    --overwrite_output_dir \
+    --do_train --do_eval --push_to_hub \
+    --push_to_hub_model_id="orchid219_ft_data2vec-vision-large-ft1k" \
+    --learning_rate 2e-5 \
+    --num_train_epochs 50 \
+    --per_device_train_batch_size 2 \
+    --per_device_eval_batch_size 2 \
+    --logging_strategy steps \
+    --logging_steps 10 \
+    --evaluation_strategy epoch \
+    --save_strategy epoch \
+    --load_best_model_at_end True \
+    --save_total_limit 3 \
+    --use_auth_token \
+    --seed 1337 \
+    --gradient_accumulation_steps 4 \
+    --gradient_checkpointing
+
+## [Pre-Train] On 雙子星雲端 gary109/orchid219_pretrain_data2vec-vision-large-ft1k-mae
+---
+OMP_NUM_THREADS=1 accelerate launch run_mae.py \
+    --dataset_name="gary109/orchid219" \
+    --model_name_or_path="facebook/data2vec-vision-large-ft1k" \
+    --output_dir="orchid219_pretrain_data2vec-vision-large-ft1k-mae" \
+    --remove_unused_columns False \
+    --label_names pixel_values \
+    --mask_ratio 0.75 \
+    --norm_pix_loss \
+    --do_train --do_eval \
+    --base_learning_rate 2e-5 \
+    --lr_scheduler_type cosine \
+    --weight_decay 0.05 \
+    --num_train_epochs 800 \
+    --save_steps="1000" \
+    --warmup_ratio 0.05 \
+    --per_device_train_batch_size 2 \
+    --per_device_eval_batch_size 2 \
+    --logging_strategy steps \
+    --logging_steps 10 \
+    --evaluation_strategy epoch \
+    --save_strategy epoch \
+    --load_best_model_at_end True \
+    --save_total_limit 3 \
+    --overwrite_output_dir \
+    --push_to_hub \
+    --hub_model_id="orchid219_pretrain_data2vec-vision-large-ft1k-mae" \
+	--hub_token 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 \
+    --seed 1337 \
+    --gradient_accumulation_steps 4 \
+    --gradient_checkpointing
+
+OMP_NUM_THREADS=1 accelerate launch run_mae.py     --dataset_name="gary109/orchid219"     --model_name_or_path="facebook/data2vec-vision-large-ft1k"     --output_dir="orchid219_pretrain_data2vec-vision-large-ft1k-mae"     --remove_unused_columns False     --label_names pixel_values     --mask_ratio 0.75     --norm_pix_loss     --do_train --do_eval     --base_learning_rate 2e-5     --lr_scheduler_type cosine     --weight_decay 0.05     --num_train_epochs 800     --save_steps="1000"     --warmup_ratio 0.05     --per_device_train_batch_size 2     --per_device_eval_batch_size 2     --logging_strategy steps     --logging_steps 10     --evaluation_strategy epoch     --save_strategy epoch     --load_best_model_at_end True     --save_total_limit 3     --overwrite_output_dir     --push_to_hub     --hub_model_id="orchid219_pretrain_data2vec-vision-large-ft1k-mae" 	--hub_token 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     --seed 1337     --gradient_accumulation_steps 4    --gradient_checkpointing
+
+
+
+
+
